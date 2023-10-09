@@ -10,6 +10,7 @@ $options = {
         :records => false,
         :latest => false,
         :chrono => false,
+        :played => 0,
     },
 }
 
@@ -164,6 +165,7 @@ def latest(ranks)
         any = days.first.won_games.first || days.first.lost_games.first
         elos = any.extras[:record][:black_elos] if player[0] == any.black_player.name
         elos = any.extras[:record][:white_elos] if player[0] == any.white_player.name
+        played = days.sum{|day| day.won_games.count} + days.sum{|day| day.lost_games.count}
         data << {
             :name => player[0],
             :first => days.first.day,
@@ -171,7 +173,7 @@ def latest(ranks)
             :rank => elos[:initial],
             :elo => days.last.elo.round,
             :uncertainty => (days.last.uncertainty*100).round,
-            :played => days.sum{|day| day.won_games.count} + days.sum{|day| day.lost_games.count},
+            :played => played,
             :won => days.sum{|day| day.won_games.count},
             :lost => days.sum{|day| day.lost_games.count},
         }
@@ -180,7 +182,7 @@ def latest(ranks)
     sort.each do |item|
         puts "#{item[:name]},#{item[:first]},#{item[:last]}," \
             "#{item[:rank]},#{item[:elo]},#{item[:uncertainty]}," \
-            "#{item[:played]},#{item[:won]},#{item[:lost]}"
+            "#{item[:played]},#{item[:won]},#{item[:lost]}" if item[:played] >= $options[:output][:played]
     end
     sort
 end
@@ -237,14 +239,17 @@ parser = OptionParser.new do |options|
     options.on("", "--adjust WEIGHT", "Weight to adjust handicap difference", Float) do |weight|
         $options[:weight] = weight.abs
     end
-    options.on("", "--records", "Output game records") do |records|
+    options.on("", "--records", "Output game records") do
         $options[:output][:records] = true
     end
-    options.on("", "--latest", "Output latest players elo") do |latest|
+    options.on("", "--latest", "Output latest players elo") do
         $options[:output][:latest] = true
     end
-    options.on("", "--chrono", "Output players elo in chrono order") do |chrono|
+    options.on("", "--chrono", "Output players elo in chrono order") do
         $options[:output][:chrono] = true
+    end
+    options.on("", "--played GAMES", "Minimum games played to be listed", Integer) do |played|
+        $options[:output][:played] = played.abs
     end
 end
 parser.parse!

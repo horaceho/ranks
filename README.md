@@ -20,9 +20,11 @@ gem install whole_history_rating
 ruby ./whr.rb
 Usage: ruby whr.rb [options] {file|folder}
         --handicap HANDICAP          Acceptable maximum handicap
+        --adjust WEIGHT              Weight to adjust handicap difference
         --records                    Output game records
         --latest                     Output latest players elo
         --chrono                     Output players elo in chrono order
+        --played GAMES               Minimum games played to be listed
 ```
 
 ### 例子 Example
