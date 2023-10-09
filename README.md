@@ -19,6 +19,7 @@ gem install whole_history_rating
 ```bash
 ruby ./whr.rb
 Usage: ruby whr.rb [options] {file|folder}
+        --change VARIANCE            Variance of rating change over one time step
         --handicap HANDICAP          Acceptable maximum handicap
         --adjust WEIGHT              Weight to adjust handicap difference
         --records                    Output game records
@@ -32,6 +33,5 @@ Usage: ruby whr.rb [options] {file|folder}
 ruby ./whr.rb --latest test/Game-Record-202310.xlsx > test/Rank-2023-latest.csv
 ruby ./whr.rb --chrono test/Game-Record-202310.xlsx > test/Rank-2023-chrono.csv
 ```
-
 
 &copy; 2023 [Horace Ho](https://horaceho.com)

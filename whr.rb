@@ -4,6 +4,7 @@ require 'whole_history_rating'
 
 $options = {
     :verbose => false,
+    :variance => 300.0, # default in whr
     :handicap => 9, # acceptable maximum handicap
     :weight => 100.0, # weight between each dan/kyu
     :output => {
@@ -15,7 +16,7 @@ $options = {
 }
 
 def import(filename)
-    puts "Import: " + filename
+    puts "Filename: #{filename} Variance: #{$options[:variance]}"
     excel = Roo::Spreadsheet.open(filename)
     # puts excel.info
 
@@ -142,7 +143,7 @@ def cleanup(records, players)
 end
 
 def whr(records, players, iterations=100)
-    @whr = WholeHistoryRating::Base.new
+    @whr = WholeHistoryRating::Base.new(:w2 => $options[:variance])
     records.each do |record|
         extras = {
             :record => record
@@ -232,6 +233,9 @@ parser = OptionParser.new do |options|
     # options.on("-v", "--verbose", "Run verbosely") do |v|
     #   $options[:verbose] = v
     # end
+    options.on("", "--change VARIANCE", "Variance of rating change over one time step", Float) do |variance|
+        $options[:variance] = variance.abs
+    end
     options.on("", "--handicap HANDICAP", "Acceptable maximum handicap", Integer) do |handicap|
         $options[:handicap] = handicap.abs
     end
