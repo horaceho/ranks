@@ -157,31 +157,56 @@ def whr(records, players, iterations=100)
 end
 
 def latest(ranks)
-    puts "name, date, elo, uncertainty"
+    puts "name, first, last, rank, elo, uncertainty, played, win, lost"
     data = []
     ranks.players.each do |player|
-        last = @whr.player_by_name(player[0]).days.last
+        days = @whr.player_by_name(player[0]).days
+        any = days.first.won_games.first || days.first.lost_games.first
+        elos = any.extras[:record][:black_elos] if player[0] == any.black_player.name
+        elos = any.extras[:record][:white_elos] if player[0] == any.white_player.name
         data << {
             :name => player[0],
-            :date => last.day,
-            :elo => last.elo.round,
-            :uncertainty => (last.uncertainty*100).round,
+            :first => days.first.day,
+            :last => days.last.day,
+            :rank => elos[:initial],
+            :elo => days.last.elo.round,
+            :uncertainty => (days.last.uncertainty*100).round,
+            :played => days.sum{|day| day.won_games.count} + days.sum{|day| day.lost_games.count},
+            :won => days.sum{|day| day.won_games.count},
+            :lost => days.sum{|day| day.lost_games.count},
         }
     end
     sort = data.sort_by { |item| -item[:elo] }
     sort.each do |item|
-        puts "#{item[:name]}, #{item[:date]}, #{item[:elo]}, #{item[:uncertainty]}"
+        puts "#{item[:name]},#{item[:first]},#{item[:last]}," \
+            "#{item[:rank]},#{item[:elo]},#{item[:uncertainty]}," \
+            "#{item[:played]},#{item[:won]},#{item[:lost]}"
     end
     sort
 end
 
 def chrono(ranks)
-    puts "name, date, elo, uncertainty"
+    puts "name, date, elo, uncertainty, won, lost"
+    data = []
     ranks.players.each do |player|
-        ratings = ranks.ratings_for_player(player[0])
-        ratings.each do |rating|
-            puts "#{player[0]}, #{rating[0]}, #{rating[1]}, #{rating[2]}"
+        # ratings = ranks.ratings_for_player(player[0])
+        # ratings.each do |rating|
+        #     puts "#{player[0]}, #{rating[0]}, #{rating[1]}, #{rating[2]}"
+        # end
+        days = @whr.player_by_name(player[0]).days
+        days.each do |one|
+            data << {
+                :name => player[0],
+                :date => one.day,
+                :elo => one.elo.round,
+                :uncertainty => (one.uncertainty*100).round,
+                :won => one.won_games.count,
+                :lost => one.lost_games.count,
+            }
         end
+    end
+    data.each do |item|
+        puts "#{item[:name]},#{item[:date]},#{item[:elo]},#{item[:uncertainty]},#{item[:won]},#{item[:lost]}"
     end
 end
 
