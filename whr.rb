@@ -160,18 +160,17 @@ def latest(ranks)
     puts "name, date, elo, uncertainty"
     data = []
     ranks.players.each do |player|
-        ratings = ranks.ratings_for_player(player[0])
-        latest = ratings.last
-        data << [
-            player[0],
-            latest[0],
-            latest[1],
-            latest[2],
-        ]
+        last = @whr.player_by_name(player[0]).days.last
+        data << {
+            :name => player[0],
+            :date => last.day,
+            :elo => last.elo.round,
+            :uncertainty => (last.uncertainty*100).round,
+        }
     end
-    sort = data.sort_by { |item| -item[2].to_i }
+    sort = data.sort_by { |item| -item[:elo] }
     sort.each do |item|
-        puts "#{item[0]}, #{item[1]}, #{item[2]}, #{item[3]}"
+        puts "#{item[:name]}, #{item[:date]}, #{item[:elo]}, #{item[:uncertainty]}"
     end
     sort
 end
