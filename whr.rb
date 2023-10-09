@@ -198,10 +198,6 @@ def loop(folder)
     end
 end
 
-def syntax()
-    puts "#{$PROGRAM_NAME} { filename | folder }"
-end
-
 parser = OptionParser.new do |options|
     options.banner = "Usage: ruby whr.rb [options] {file|folder}"
     # options.on("-v", "--verbose", "Run verbosely") do |v|
