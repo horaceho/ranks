@@ -221,8 +221,7 @@ def file(filename)
     chrono(ranks) if $options[:output][:chrono]
 end
 
-def loop(folder)
-    # puts "Loop: " + folder
+def folder(folder)
     Dir.glob(folder + "/**/*.{xls,xlsx}").each do |filename|
         file(filename)
     end
@@ -256,7 +255,7 @@ parser.parse!
 
 if ARGV.size > 0
     if File.directory?(ARGV[0])
-        loop(ARGV[0])
+        folder(ARGV[0])
     elsif File.file?(ARGV[0])
         file(ARGV[0])
     else
