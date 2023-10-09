@@ -4,7 +4,8 @@ require 'whole_history_rating'
 
 $options = {
     :verbose => false,
-    :handicap => 100,
+    :handicap => 9, # acceptable maximum handicap
+    :weight => 100.0, # weight between each dan/kyu
     :output => {
         :records => false,
         :latest => false,
@@ -142,8 +143,11 @@ end
 def whr(records, players, iterations=100)
     @whr = WholeHistoryRating::Base.new
     records.each do |record|
-        extras = {}
-        game = @whr.create_game(record[:black], record[:white], record[:winner], record[:date], record[:difference], extras)
+        extras = {
+            :record => record
+        }
+        handicap = record[:difference] * $options[:weight]
+        game = @whr.create_game(record[:black], record[:white], record[:winner], record[:date], handicap, extras)
     end
     @whr.players.each do |player|
         # STDERR.puts player[1]
@@ -204,7 +208,10 @@ parser = OptionParser.new do |options|
     #   $options[:verbose] = v
     # end
     options.on("", "--handicap HANDICAP", "Acceptable maximum handicap", Integer) do |handicap|
-        $options[:handicap] = handicap
+        $options[:handicap] = handicap.abs
+    end
+    options.on("", "--adjust WEIGHT", "Weight to adjust handicap difference", Float) do |weight|
+        $options[:weight] = weight.abs
     end
     options.on("", "--records", "Output game records") do |records|
         $options[:output][:records] = true
