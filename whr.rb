@@ -32,7 +32,7 @@ def import(filename)
         organization: "Organization",
         match: "Match",
         round: "Round",
-        link: "OGS Link",
+        link: /OGS Link|Link/,
         remark: "Remark",
         clean: true
     )
@@ -40,10 +40,10 @@ def import(filename)
     excel.default_sheet = excel.sheets[1] # Player
     players = excel.parse(
         name: "Player",
-        initial: "Initial Rank",
-        flat: "Flat Rank",
-        cert: "Cert Rank",
-        guess: "Guess Rank",
+        initial: /Initial Rank/,
+        flat: /Flat Rank|Initial Rank/,
+        cert: /Cert Rank|Initial Rank/,
+        guess: /Guess Rank|Initial Rank/,
         clean: true
     )
 
