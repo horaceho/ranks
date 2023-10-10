@@ -131,6 +131,9 @@ parser = OptionParser.new do |options|
     options.on("", "--adjust WEIGHT", "Weight to adjust handicap difference", Float) do |weight|
         $options[:weight] = weight.abs
     end
+    options.on("", "--played GAMES", "Minimum games played to be listed", Integer) do |played|
+        $options[:output][:played] = played.abs
+    end
     options.on("", "--record", "Output game records") do
         $options[:output][:record] = true
     end
@@ -139,9 +142,6 @@ parser = OptionParser.new do |options|
     end
     options.on("", "--chrono", "Output players elo in chrono order") do
         $options[:output][:chrono] = true
-    end
-    options.on("", "--played GAMES", "Minimum games played to be listed", Integer) do |played|
-        $options[:output][:played] = played.abs
     end
 end
 parser.parse!

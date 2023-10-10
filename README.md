@@ -22,10 +22,10 @@ Usage: ruby whr.rb [options] {file|folder}
         --change VARIANCE            Variance of rating change over one time step
         --handicap HANDICAP          Acceptable maximum handicap
         --adjust WEIGHT              Weight to adjust handicap difference
+        --played GAMES               Minimum games played to be listed
         --record                     Output game records
         --latest                     Output latest players elo
         --chrono                     Output players elo in chrono order
-        --played GAMES               Minimum games played to be listed
 ```
 
 ### 測試 Test
