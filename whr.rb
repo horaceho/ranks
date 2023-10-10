@@ -10,7 +10,7 @@ $options = {
     :handicap => 9, # acceptable maximum handicap
     :weight => 100.0, # weight between each dan/kyu
     :output => {
-        :records => false,
+        :record => false,
         :latest => false,
         :chrono => false,
         :played => 0,
@@ -31,6 +31,21 @@ def whr(records, players, iterations=100)
     end
     @whr.iterate(iterations)
     @whr
+end
+
+def record(records)
+    puts "record,date," \
+        "black,black rank,black elo," \
+        "white,white rank,white elo," \
+        "winner"
+
+    records.each do |record|
+        puts "#{record[:row]}," \
+            "#{record[:date].strftime("%Y%m%d")}," \
+            "#{record[:black]},#{record[:black_elos][:initial]},#{record[:black_elos][:initial_elo]}," \
+            "#{record[:white]},#{record[:white_elos][:initial]},#{record[:white_elos][:initial_elo]}," \
+            "#{record[:winner]}"
+    end
 end
 
 def latest(ranks)
@@ -91,7 +106,7 @@ end
 def file(filename)
     records, players = Xls::import(filename, $options)
     ranks = whr(records, players)
-
+    record(records) if $options[:output][:record]
     latest(ranks) if $options[:output][:latest]
     chrono(ranks) if $options[:output][:chrono]
 end
@@ -116,8 +131,8 @@ parser = OptionParser.new do |options|
     options.on("", "--adjust WEIGHT", "Weight to adjust handicap difference", Float) do |weight|
         $options[:weight] = weight.abs
     end
-    options.on("", "--records", "Output game records") do
-        $options[:output][:records] = true
+    options.on("", "--record", "Output game records") do
+        $options[:output][:record] = true
     end
     options.on("", "--latest", "Output latest players elo") do
         $options[:output][:latest] = true

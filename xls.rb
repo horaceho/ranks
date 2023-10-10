@@ -90,11 +90,6 @@ module Xls
         row = 1
         cleaned = []
 
-        header = "record,date," \
-            "white,white rank,white elo," \
-            "black,black rank,black elo," \
-            "winner"
-        puts header if options[:output][:records]
         records.each do |record|
             row += 1
             # skip incomplete records
@@ -117,14 +112,6 @@ module Xls
             record[:black_elos] = black_elos
             record[:white_elos] = white_elos
             cleaned << record
-
-            info = "#{record[:row]}," \
-                "#{record[:date].strftime("%Y%m%d")}," \
-                "#{record[:white]},#{white_elos[:initial]},#{white_elos[:initial_elo]}," \
-                "#{record[:black]},#{black_elos[:initial]},#{black_elos[:initial_elo]}," \
-                "#{record[:winner]}+"
-
-            puts info if options[:output][:records]
         end
         cleaned
     end
