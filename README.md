@@ -28,10 +28,13 @@ Usage: ruby whr.rb [options] {file|folder}
         --played GAMES               Minimum games played to be listed
 ```
 
-### 例子 Example
+### 測試 Test
 ```bash
-ruby ./whr.rb --latest test/Game-Record-202310.xlsx > test/Rank-2023-latest.csv
-ruby ./whr.rb --chrono test/Game-Record-202310.xlsx > test/Rank-2023-chrono.csv
+mkdir -p test
+cp ./data/Game-Record-20231010.xlsx ./test/
+
+ruby ./whr.rb --latest test/Game-Record-20231010.xlsx > test/Rank-20231010-latest.csv
+ruby ./whr.rb --chrono test/Game-Record-20231010.xlsx > test/Rank-20231010-chrono.csv
 ```
 
 &copy; 2023 [Horace Ho](https://horaceho.com)
