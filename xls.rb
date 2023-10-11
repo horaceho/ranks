@@ -8,8 +8,8 @@ module Xls
         excel.default_sheet = excel.sheets[0] # Record
         records = excel.parse(
             date: /Date/,
-            black: /Black/,
-            white: /White/,
+            black: /Black|Player1/,
+            white: /White|Player2/,
             handicap: /Handicap/,
             difference: /Difference/,
             winner: /Winner Side/,
@@ -75,6 +75,7 @@ module Xls
             "18k" =>  300,
             "19k" =>  200,
             "20k" =>  100,
+            "na"  => 2100,
         }
         players.each do |player|
             player[:initial_elo] = elos[player[:initial]] || elos["1d"]
