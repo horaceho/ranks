@@ -8,6 +8,7 @@ $options = {
     :verbose => false,
     :variance => 300.0, # default in whr
     :handicap => 9, # acceptable maximum handicap
+    :elo_diff => 900, # acceptable maximum elo difference
     :weight => 100.0, # weight between each dan/kyu
     :output => {
         :record => false,
@@ -127,6 +128,9 @@ parser = OptionParser.new do |options|
     end
     options.on("", "--handicap HANDICAP", "Acceptable maximum handicap", Integer) do |handicap|
         $options[:handicap] = handicap.abs
+    end
+    options.on("", "--elo DIFFERENCE", "Acceptable maximum elo difference", Integer) do |elo_diff|
+        $options[:elo_diff] = elo_diff.abs
     end
     options.on("", "--adjust WEIGHT", "Weight to adjust handicap difference", Float) do |weight|
         $options[:weight] = weight.abs

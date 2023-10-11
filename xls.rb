@@ -92,6 +92,8 @@ module Xls
 
         records.each do |record|
             row += 1
+            record[:row] = row
+
             # skip incomplete records
             next STDERR.puts("#{row} nil date") if record[:date].nil?
             next STDERR.puts("#{row} not date") if !record[:date].respond_to?(:strftime)
@@ -108,9 +110,13 @@ module Xls
             white_elos = elos.find { |elo| elo[:name] == record[:white]}
             next STDERR.puts("#{row} player #{record[:white]} not found") if white_elos.nil?
 
-            record[:row] = row
             record[:black_elos] = black_elos
             record[:white_elos] = white_elos
+
+            # skip elo difference
+            difference = (record[:white_elos][:initial_elo]-record[:black_elos][:initial_elo]).abs
+            next STDERR.puts("#{row} elo difference #{difference}") if difference > options[:elo_diff]
+
             cleaned << record
         end
         cleaned
