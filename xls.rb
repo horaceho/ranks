@@ -12,7 +12,7 @@ module Xls
             white: /White|Player2/,
             handicap: /Handicap/,
             difference: /Difference/,
-            winner: /Winner Side/,
+            winner: /Winner Name/,
             result: /Result/,
             organization: /Organization/,
             match: /Match/,
@@ -101,6 +101,7 @@ module Xls
             next STDERR.puts("#{row} no white") if record[:white].nil? || record[:white].empty?
             next STDERR.puts("#{row} no black") if record[:black].nil? || record[:black].empty?
             next STDERR.puts("#{row} no winner") if record[:winner].nil? || record[:winner].empty?
+            next STDERR.puts("#{row} no winner") if (record[:winner] != record[:black] && record[:winner] != record[:white])
 
             # skip handicap
             next STDERR.puts("#{row} handicap #{record[:difference]}") if record[:difference] > options[:handicap]

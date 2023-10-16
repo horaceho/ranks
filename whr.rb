@@ -10,7 +10,7 @@ $options = {
     :min_rank => 100.0, # minimum elo
     :handicap => 9, # acceptable maximum handicap
     :elo_diff => 900, # acceptable maximum elo difference
-    :weight => 100.0, # weight between each dan/kyu
+    :weight => 100.0, # weight of handicap
     :output => {
         :record => false,
         :latest => false,
@@ -22,11 +22,18 @@ $options = {
 def whr(records, players, iterations=100)
     @whr = WholeHistoryRating::Base.new(:w2 => $options[:variance])
     records.each do |record|
+        side = '?'
+        side = 'B' if record[:black] == record[:winner]
+        side = 'W' if record[:white] == record[:winner]
+        next STDERR.puts("no winner") if side == '?'
+
+        handicap = record[:difference] * $options[:weight]
+
         extras = {
             :record => record
         }
-        handicap = record[:difference] * $options[:weight]
-        game = @whr.create_game(record[:black], record[:white], record[:winner], record[:date], handicap, extras)
+
+        game = @whr.create_game(record[:black], record[:white], side, record[:date], handicap, extras)
     end
     @whr.players.each do |player|
         # STDERR.puts player[1]
