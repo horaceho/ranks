@@ -114,6 +114,10 @@ module Xls
             record[:black_elos] = black_elos
             record[:white_elos] = white_elos
 
+            # skip minimum rank
+            next STDERR.puts("#{row} player #{record[:black]} elo #{record[:black_elos][:initial_elo]}") if record[:black_elos][:initial_elo] < options[:min_rank]
+            next STDERR.puts("#{row} player #{record[:white]} elo #{record[:white_elos][:initial_elo]}") if record[:white_elos][:initial_elo] < options[:min_rank]
+
             # skip elo difference
             difference = (record[:white_elos][:initial_elo]-record[:black_elos][:initial_elo]).abs
             next STDERR.puts("#{row} elo difference #{difference}") if difference > options[:elo_diff]

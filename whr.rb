@@ -7,6 +7,7 @@ include Xls
 $options = {
     :verbose => false,
     :variance => 300.0, # default in whr
+    :min_rank => 100.0, # minimum elo
     :handicap => 9, # acceptable maximum handicap
     :elo_diff => 900, # acceptable maximum elo difference
     :weight => 100.0, # weight between each dan/kyu
@@ -125,6 +126,9 @@ parser = OptionParser.new do |options|
     # end
     options.on("", "--change VARIANCE", "Variance of rating change over one time step", Float) do |variance|
         $options[:variance] = variance.abs
+    end
+    options.on("", "--min-rank ELO", "Acceptable player rank", Integer) do |elo|
+        $options[:min_rank] = elo.abs
     end
     options.on("", "--handicap HANDICAP", "Acceptable maximum handicap", Integer) do |handicap|
         $options[:handicap] = handicap.abs

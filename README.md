@@ -20,7 +20,9 @@ gem install whole_history_rating
 ruby ./whr.rb
 Usage: ruby whr.rb [options] {file|folder}
         --change VARIANCE            Variance of rating change over one time step
+        --min-rank ELO               Acceptable player rank
         --handicap HANDICAP          Acceptable maximum handicap
+        --elo DIFFERENCE             Acceptable maximum elo difference
         --adjust WEIGHT              Weight to adjust handicap difference
         --played GAMES               Minimum games played to be listed
         --record                     Output game records
